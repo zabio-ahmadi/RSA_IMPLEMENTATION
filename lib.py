@@ -3,7 +3,7 @@ def exp_rapide(x,pow,n):
     while pow!=0: 
         if pow%2==1:
             result = (result * x) % n
-        pow//=2 
+        pow = pow // 2 # floor division 
         x = (x * x) % n 
     return result
 
