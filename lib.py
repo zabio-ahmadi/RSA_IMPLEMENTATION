@@ -1,20 +1,26 @@
+
+# to decode our message we need rapide exponentiation 
 def exp_rapide(x,pow,n): 
     result=1 
     while pow!=0: # while pow is not zero 
-        if pow%2==1: # if the power is odd  like n^3 
+        if pow%2==1: # if the power is even  like n^3 
             result = (result * x) % n # 
         pow = pow // 2 # floor division 
-        x = (x * x) % n 
+        x = (x * x) % n  # 
     return result
 
 # find two primary number : p et q because p*q should equals n 
 def calc_p_q(n):
     nb_premier = n
     facteur  = 2
-    while facteur * facteur < nb_premier:
-        while nb_premier % facteur == 0:
+    while facteur  < int(n ** (1/2)): # go from 2 to sqrt of primary number 
+        
+        if nb_premier % facteur == 0: # if we find our first key the second one  is n/first 
             nb_premier = nb_premier / facteur
-        facteur += 1 
+        
+        facteur += 1
+
+
     return int(n/nb_premier), int(nb_premier)
 
 # calculate z = (p - 1) * (q - 1)
@@ -70,10 +76,29 @@ def decode_by_private_key(key, n, message_list):
     
     return decoded_message_by_private_key
 
-# decode raw message (65 => 'A', 66 => 'B')
+
+"""
+recieves decoded message as integer 
+convert it into hexa-decimal : 6909773 -> 0x696f4d
+
+little endian : 
+4d -> 77 (decimale) -> 'M' (ascii)
+6f -> 111 -> 'o'
+69 -> 105 -> 'i'
+"""
 def decode_raw_data(raw_message_list):
     decoded_message = ""
     for msg in raw_message_list:
         decoded_message += msg.to_bytes(len(str(msg)), 'little').decode('utf8')
     
     return decoded_message
+
+
+def decode_raw_data_v2(raw_message_list):
+    decoded_message = ""
+
+    for msg in raw_message_list:
+        str_hex = str(hex(msg))
+        str_hex = str_hex[0: len(str_hex)]
+
+        
